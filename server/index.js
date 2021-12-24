@@ -11,6 +11,9 @@ app.use(cors()) // let us to connect to ports different from current
 
 // ROUTES //
 
+// Register
+app.use("/auth", require("./router/jwtAuth"));
+
 app.get("/users", async(req, res) => {
     try {
         const allUsers = await pool.query(`SELECT * FROM users`);
@@ -20,6 +23,9 @@ app.get("/users", async(req, res) => {
         console.error(error.message);
     }
 })
+
+
+
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)
