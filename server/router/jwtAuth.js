@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
+const jwtGenerator = require("../utils/jwtGenerator");
 
 // Registering
 
@@ -21,11 +22,13 @@ router.post("/register", async (req, res) => {
         // Concat salt and password and make a hash
         const hash = await bcrypt.hash(password, salt);
         // Put user inside our database
-        const newUser = await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",
+        const newUser = await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
             [name, email, hash]
         );
+        // Generate JSON Web Token
+        const token = jwtGenerator(newUser.rows[0].id);
         // Feedback to client
-        res.json(user.rows);
+        res.json({ token });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error")
