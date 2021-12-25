@@ -31,7 +31,32 @@ router.post("/register", async (req, res) => {
         res.json({ token });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Server Error")
+        res.status(500).send("Server Error");
+    }
+})
+
+// Log in
+
+router.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        // If user already exists
+        const user = await pool.query(`SELECT * FROM users WHERE email = $1`
+            , [email]);
+        if (user.rows.length === 0) {
+            return res.status(401).json("Password or email is incorrect");
+        }
+        // Compare passwords
+        const isValidPassword = await bcrypt.compare(password, user.rows[0].password);
+        if (!isValidPassword) {
+            return res.status(401).json("Password or email is incorrect");
+        }
+        const token = jwtGenerator(user.rows[0].id);
+        res.json({ token });
+        // Give JWT
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
     }
 })
 
