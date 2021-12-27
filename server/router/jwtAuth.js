@@ -2,6 +2,7 @@ const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const authorization = require("../middleware/authorization");
 
 // Registering
 
@@ -51,9 +52,10 @@ router.post("/login", async (req, res) => {
         if (!isValidPassword) {
             return res.status(401).json("Password or email is incorrect");
         }
-        const token = jwtGenerator(user.rows[0].id);
-        res.json({ token });
         // Give JWT
+        const token = jwtGenerator(user.rows[0].id);
+        // Feedback to client
+        res.json({ token });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
