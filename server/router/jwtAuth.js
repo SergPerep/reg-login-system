@@ -2,11 +2,12 @@ const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
 
 // Registering
 
-router.post("/register", async (req, res) => {
+router.post("/register", validInfo, async (req, res) => {
     try {
         const { name, email, password } = req.body;
         // If user already exists...
@@ -38,7 +39,7 @@ router.post("/register", async (req, res) => {
 
 // Log in
 
-router.post("/login", async (req, res) => {
+router.post("/login", validInfo, async (req, res) => {
     try {
         const { email, password } = req.body;
         // If user already exists
@@ -56,6 +57,16 @@ router.post("/login", async (req, res) => {
         const token = jwtGenerator(user.rows[0].id);
         // Feedback to client
         res.json({ token });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+})
+
+router.get("/is-verify", authorization, async (req, res) => {
+    try {
+        console.log("-- is-verify-route");
+        res.json(true);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
