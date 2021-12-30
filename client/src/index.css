@@ -7,6 +7,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root{
+  --c-black-a80: rgba(0, 0, 0, .8);
+  --c-black-a60: rgba(0, 0, 0, .6);
+  --c-black-a12: rgba(0, 0, 0, .12);
+  --c-black-a08: rgba(0, 0, 0, .08);
+  --c-black-a04: rgba(0, 0, 0, .04);
+}
+
 body {
   margin:0;
 }
@@ -43,4 +51,10 @@ input {
   padding: 8px 12px;
   cursor: pointer;
   width: 100%;
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--c-black-a60);
 }

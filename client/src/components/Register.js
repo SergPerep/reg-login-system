@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./Input";
 
 const Register = props => {
     const { setAuth } = props;
@@ -9,7 +10,7 @@ const Register = props => {
     });
 
     const { email, password, name } = inputs;
-    const onChange = e => {
+    const handleInputChange = e => {
         setInputs({ ...inputs, [e.target.name]: e.target.value })
     }
     const onSubmit = async (e) => {
@@ -35,24 +36,30 @@ const Register = props => {
         <>
             <h1>Register</h1>
             <form onSubmit={onSubmit}>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={onChange} />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={onChange} />
-                <input
+                <Input
                     type="text"
                     name="name"
-                    placeholder="Name"
+                    placeholder="Anna"
                     value={name}
-                    onChange={onChange} />
+                    label="Name"
+                    onChange={handleInputChange}
+                />
+                <Input
+                    type="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    value={email}
+                    label="Email"
+                    onChange={handleInputChange}
+                />
+                <Input
+                    type="password"
+                    name="password"
+                    placeholder="******"
+                    label="Password"
+                    value={password}
+                    onChange={handleInputChange}
+                />
                 <button className="btn btn-default">Submit</button>
             </form>
         </>
